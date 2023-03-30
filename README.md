@@ -8,6 +8,7 @@ Samuel Viana de Souza             832088
 O objetivo deste programa é representar um grafo utilizando uma matriz de adjacência e permitir a realização de operações como adicionar e remover vértices e arestas, obter informações sobre os vértices e arestas e mostrar o grafo em forma de matriz de adjacência.
 
 #### Instalação:
+Faça o download do programa ou utilize git clone.
 Fazer download de alguma ide que tenha as bibliotecas C++. Recomendamos o DevC++ rapido e facil de instalar.
 Este programa foi desenvolvido em C++ e não requer instalação adicional.
 Basta compilar o código e executá-lo.
