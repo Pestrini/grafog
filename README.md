@@ -1,4 +1,4 @@
-# GRAFO G - Trabalho 2ª lista de exercios
+# GRAFO G - Avaliação Parcial
 
 Gabriel Henrique Pereira Pestrini 828420
 
@@ -48,6 +48,15 @@ Essa opção permite definir um novo valor para uma aresta específica no grafo.
 
 11. Mostrar Grafo:
 Essa opção permite mostrar a representação do grafo atual, exibindo todos os vértices e as arestas que os conectam.
+
+12. Mostrar o Caminho:
+Essa opção retorna um vetor com os índices dos vértices do caminho entre a e b, se existir, ou um vetor vazio caso contrário.
+
+13. Unificação de Grafos:
+Esta opção retorna um grafo resultante da união entre os grafos G1 e G2.
+
+14. Intersecção de Grafos:
+Esta opção deve retornar um grafo resultante da intersecção entre os grafos G1 e G2. Em outras palavras, o grafo resultante deve conter apenas os vértices e arestas que estão presentes em ambos os grafos G1 e G2.
 
 0. Sair:
 Essa opção permite encerrar o programa. O usuário deve selecioná-la para sair do menu e finalizar a execução do programa.
