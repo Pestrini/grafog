@@ -121,6 +121,116 @@ public:
             cout << endl;
         }
     }
+
+    vector<int> caminho(int a, int b) {
+    vector<bool> visitados(adj_matrix.size(), false); // vetor de visitados, inicialmente todos são falsos
+    vector<int> pai(adj_matrix.size(), -1); // vetor que guarda o pai de cada vértice na árvore de busca, inicialmente todos são -1
+    vector<int> resultado; // vetor que guarda o caminho entre a e b, se existir
+
+    queue<int> fila; // fila para a busca em largura
+    fila.push(a); // adiciona o vértice a à fila
+    visitados[a] = true; // marca o vértice a como visitado
+
+    while (!fila.empty()) {
+        int v = fila.front(); // pega o vértice da frente da fila
+        fila.pop(); // remove o vértice da frente da fila
+
+        for (int u : neighbors(v)) { // para cada vizinho u de v
+            if (!visitados[u]) { // se u não foi visitado
+                fila.push(u); // adiciona u à fila
+                visitados[u] = true; // marca u como visitado
+                pai[u] = v; // v é o pai de u na árvore de busca
+                if (u == b) { // se chegamos em b
+                    // monta o caminho a partir do vetor de pais
+                    resultado.push_back(b);
+                    int p = pai[b];
+                    while (p != -1) {
+                        resultado.push_back(p);
+                        p = pai[p];
+                    }
+                    reverse(resultado.begin(), resultado.end()); // inverte o caminho para ficar na ordem de a até b
+                    return resultado; // retorna o caminho
+                }
+            }
+        }
+    }
+
+    // se chegamos aqui é porque não encontramos o caminho
+    return resultado; // retorna vetor vazio
+    }
+
+
+    Graph uniao(const Graph& G1, const Graph& G2) {
+        int size = G1.size() + G2.size();
+        Graph G(size);
+
+        // Adicionar todos os vértices de G1 em G
+        for (int i = 0; i < G1.size(); i++) {
+            G.add_vertex(i);
+            G.set_vertex_value(i, G1.get_vertex_value(i));
+        }
+
+        // Adicionar todos os vértices de G2 em G, ignorando aqueles que já foram adicionados em G1
+        for (int i = 0; i < G2.size(); i++) {
+            if (!G.adjacent(i, i + G1.size())) { // Verifica se o vértice ainda não foi adicionado
+                G.add_vertex(i + G1.size());
+                G.set_vertex_value(i + G1.size(), G2.get_vertex_value(i));
+            }
+        }
+
+        // Adicionar todas as arestas de G1 em G
+        for (int i = 0; i < G1.size(); i++) {
+            for (int j : G1.neighbors(i)) {
+                G.add_edge(i, j, G1.get_edge_value(i, j));
+            }
+        }
+
+        // Adicionar todas as arestas de G2 em G, ignorando aquelas que já foram adicionadas em G1
+        for (int i = 0; i < G2.size(); i++) {
+            for (int j : G2.neighbors(i)) {
+                if (!G.adjacent(i + G1.size(), j + G1.size())) { // Verifica se a aresta ainda não foi adicionada
+                    G.add_edge(i + G1.size(), j + G1.size(), G2.get_edge_value(i, j));
+                }
+            }
+        }
+
+        return G;
+    }
+
+        Graph interseccao(const Graph& G1, const Graph& G2) {
+        int size = std::min(G1.size(), G2.size());
+        Graph G(size);
+
+        // Adicionar todos os vértices de G1 em G
+        for (int i = 0; i < G1.size(); i++) {
+            G.add_vertex(i);
+            G.set_vertex_value(i, G1.get_vertex_value(i));
+        }
+
+        // Adicionar vértices de G2 que não estão em G1
+        for (int i = 0; i < G2.size(); i++) {
+            if (G1.contains_vertex_with_value(G2.get_vertex_value(i))) {
+                int vertex_index = G1.find_vertex_with_value(G2.get_vertex_value(i));
+                G.add_vertex(vertex_index);
+            }
+        }
+
+        // Adicionar todas as arestas de G1 e G2 que estão em ambos
+        for (int i = 0; i < G1.size(); i++) {
+            for (int j : G1.neighbors(i)) {
+                if (G2.contains_vertex_with_value(G1.get_vertex_value(j))) {
+                    int vertex_index = G2.find_vertex_with_value(G1.get_vertex_value(j));
+                    if (G2.adjacent(i, vertex_index)) {
+                        G.add_edge(i, vertex_index, G1.get_edge_value(i, j));
+                    }
+                }
+            }
+        }
+
+        return G;
+    }
+
+
 };
 
 int main() {
@@ -144,6 +254,9 @@ int main() {
         cout << "9. Obter o valor de uma aresta\n";
         cout << "10. Definir o valor de uma aresta\n";
         cout << "11. Mostrar Grafo\n";
+        cout << "12. Mostrar o Caminho\n";
+        cout << "13. Unificação de Grafos\n";
+        cout << "14. Intersecção de Grafos\n";
         cout << "0. Sair\n";
 
         cin >> choice;
@@ -224,6 +337,32 @@ int main() {
         }
         else if (choice == 11) {
             print_graph();
+        }
+        else if (choice == 12) {
+            cout << "Digite o vertice de origem: ";
+            cin >> a;
+
+            cout << "Digite o vertice de destino: ";
+            cin >> b;
+
+            vector<int> path = g.caminho(a, b);
+            if (path.empty()) {
+                cout << "Nao existe caminho entre " << a << " e " << b << "\n";
+            } else {
+                cout << "Caminho entre " << a << " e " << b << ": ";
+                for (int i = 0; i < path.size(); i++) {
+                    cout << path[i] << " ";
+                }
+                cout << "\n";
+            }    
+        }
+        else if (choice == 13) {
+            Graph result = g.uniao(g2);
+            result.print_graph();
+        }
+        else if (choice == 14) {
+            Graph G3 = interseccao(G1, G2);
+            G3.print_graph();
         }
         else if (choice == 0) {
             cout << "Saindo do programa..." << endl;
