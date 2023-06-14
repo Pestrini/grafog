@@ -58,6 +58,9 @@ Esta opção retorna um grafo resultante da união entre os grafos G1 e G2.
 14. Intersecção de Grafos:
 Esta opção deve retornar um grafo resultante da intersecção entre os grafos G1 e G2. Em outras palavras, o grafo resultante deve conter apenas os vértices e arestas que estão presentes em ambos os grafos G1 e G2.
 
+15. BFS (Busca em Largura):
+Esta opção o programa solicita o vértice de partida e o vértice de destino, executa o método BFS de busca em largura para percorrer o grafo a partir do vértice de partida (inicio) e destino (fim), em seguida, imprime o caminho.
+
 0. Sair:
 Essa opção permite encerrar o programa. O usuário deve selecioná-la para sair do menu e finalizar a execução do programa.
 
