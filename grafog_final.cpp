@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <queue>
+#include <algorithm>
 
 using namespace std;
 
@@ -231,6 +233,59 @@ public:
     }
 
 
+    // BFS - busca em largura para encontrar o caminho entre dois vértices, de início e fim.
+    vector<int> bfs(int start_vertex, int end_vertex) 
+    {
+        vector<bool> visited(adj_matrix.size(), false); // vetor de visitados, inicialmente todos são falsos
+        vector<int> parent(adj_matrix.size(), -1); // vetor que guarda o pai de cada vértice na árvore de busca, inicialmente todos são -1
+        vector<int> path; // vetor que guarda o caminho entre start_vertex e end_vertex, se existir
+
+        queue<int> queue; // fila para a busca em largura
+        queue.push(start_vertex); // adiciona o vértice inicial à fila
+        visited[start_vertex] = true; // marca o vértice inicial como visitado
+
+        while (!queue.empty()) {
+            int current_vertex = queue.front(); // pega o vértice da frente da fila
+            queue.pop(); // remove o vértice da frente da fila
+
+            // Verifica se o vértice atual é o vértice final
+            if (current_vertex == end_vertex) {
+                // Monta o caminho a partir do vetor de pais
+                int vertex = end_vertex;
+                while (vertex != -1) {
+                    path.insert(path.begin(), vertex);
+                    vertex = parent[vertex];
+                }
+                break;
+            }
+
+            // Percorre todos os vizinhos do vértice atual
+            for (int neighbor : neighbors(current_vertex)) {
+                if (!visited[neighbor]) { // se o vizinho não foi visitado
+                    queue.push(neighbor); // adiciona o vizinho à fila
+                    visited[neighbor] = true; // marca o vizinho como visitado
+                    parent[neighbor] = current_vertex; // o vértice atual é o pai do vizinho na árvore de busca
+                }
+            }
+        }
+
+        return path;
+    }
+
+    // imprime o caminho entre dois vértices
+    void print_path(const vector<int>& path) {
+        if (path.empty()) {
+            cout << "Não há caminho entre os vértices" << endl;
+        } else {
+            cout << "Caminho encontrado: ";
+            for (int vertex : path) {
+                cout << vertex << " ";
+            }
+            cout << endl;
+        }
+    }
+
+
 };
 
 int main() {
@@ -242,7 +297,7 @@ int main() {
 
     int choice;
     while (true) {
-        cout << "\nEscolha uma opção:\n";
+        cout << "========== Menu ==========" << endl;
         cout << "1. Verificar se há uma aresta entre dois vértices\n";
         cout << "2. Listar todos os vizinhos de um vértice\n";
         cout << "3. Adicionar um vértice\n";
@@ -257,7 +312,10 @@ int main() {
         cout << "12. Mostrar o Caminho\n";
         cout << "13. Unificação de Grafos\n";
         cout << "14. Intersecção de Grafos\n";
+        cout << "15. BFS (Busca em Largura)\n";
         cout << "0. Sair\n";
+        cout << "==========================" << endl;
+        cout << "Escolha uma opção: ";
 
         cin >> choice;
 
@@ -363,6 +421,16 @@ int main() {
         else if (choice == 14) {
             Graph G3 = interseccao(G1, G2);
             G3.print_graph();
+        }
+        else if (choice == 15) {
+            int start_vertex, end_vertex;
+            cout << "Digite o vértice de partida: ";
+            cin >> start_vertex;
+            cout << "Digite o vértice de destino: ";
+            cin >> end_vertex;
+            graph.bfs(start_vertex);
+            vector<int> path = graph.bfs(start_vertex, end_vertex);
+            graph.print_path(path);
         }
         else if (choice == 0) {
             cout << "Saindo do programa..." << endl;
